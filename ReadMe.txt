@@ -1,161 +1,161 @@
-�� �@�\
-    10�����ƂɃC�x���g���O��ǂ�ŁA�ʒm�Ώۂ̃C�x���g������΃��[�����܂��B
+﻿■ 機能
+    10分ごとにイベントログを読んで、通知対象のイベントがあればメールします。
 
-�� �����
-    �ȉ����ł̉ғ����т�����܂��B
+■ 動作環境
+    以下環境での稼働実績があります。
         Windows Server 2008 R2
         Windows Server 2012
         Windows Server 2012 R2
         Windows Server 2016 TP5
 
-�� �C���X�g�[�����@
-    �K���ȃt�H���_�[�ɑS�Ẵt�@�C�����R�s�[
+■ インストール方法
+    適当なフォルダーに全てのファイルをコピー
 
-    ConfigCommon.ps1 �́u### �K���ݒ肷�鍀�� ###�v��ݒ�
+    ConfigCommon.ps1 の「### 必ず設定する項目 ###」を設定
 
-    ConfigNode.ps1 �́u### �K���ݒ肷�鍀�� ###�v��ݒ�
-        �u�`�F�b�N����A�v���P�[�V�����ƃT�[�r�X���O�v���w�肷��ƁA�A�v���P�[�V�������O���`�F�b�N���܂��B
-        �K�v�ɉ����ăT�[�o�[�p�̃��O���Z�b�g���Ă��������B(Hyper-V/AD DS/DNS�̏ꍇ�́A�����ʐݒ���ݒ肷��� OK
+    ConfigNode.ps1 の「### 必ず設定する項目 ###」を設定
+        「チェックするアプリケーションとサービスログ」を指定すると、アプリケーションログをチェックします。
+        必要に応じてサーバー用のログをセットしてください。(Hyper-V/AD DS/DNSの場合は、役割別設定例を設定すれば OK
 
-    �Ǘ������� Install.ps1 �����s
+    管理権限で Install.ps1 を実行
 
-�� ����m�F
-    TestEvent.ps1 ���Ǘ������Ŏ��s����ƁA���̃`�F�b�N���Ƀ��[�������M�����
+■ 動作確認
+    TestEvent.ps1 を管理権限で実行すると、次のチェック時にメールが送信される
 
-�� �A���C���X�g�[�����@
-    �Ǘ������� Uninstall.ps1 �����s
-    �S�Ẵt�@�C�����폜
+■ アンインストール方法
+    管理権限で Uninstall.ps1 を実行
+    全てのファイルを削除
 
-�� �Ď�����
+■ 監視動作
     CheckEventLog.ps1
-        �Ď��X�N���v�g�{��
+        監視スクリプト本体
 
-    �C�x���g�ʓ��쐧��� ConfigEvent.ps1 �Őݒ肷��
+    イベント別動作制御は ConfigEvent.ps1 で設定する
 
-    �G���[
-        ��{�S���ʒm
-        �X���[�C�x���g�w��
+    エラー
+        基本全部通知
+        スルーイベント指定
 
-    �x��
-        ��{�X���[
-        �ʒm�C�x���g�w��
+    警告
+        基本スルー
+        通知イベント指定
 
-    ���
-        ��{�X���[
-        �ʒm�C�x���g�w��
+    情報
+        基本スルー
+        通知イベント指定
 
-�� ���O�N���[���i�b�v
+■ ログクリーンナップ
     RemoveExecLog.ps1
-        �ۑ�����(5��)���߂������s���O(*.log)���폜
+        保存期間(5日)を過ぎた実行ログ(*.log)を削除
 
-�� �W�J�⏕�@�\
+■ 展開補助機能
     Install.ps1
-        �X�P�W���[���o�^
+        スケジュール登録
 
     Uninstall.ps1
-        �X�P�W���[���폜
+        スケジュール削除
 
     TestEvent.ps1
-        �e�X�g�p�C�x���g���O�L�^
+        テスト用イベントログ記録
 
-�� �ݒ���
-    ���ʐݒ�
+■ 設定情報
+    共通設定
         ConfigCommon.ps1
-            �S�̋��ʐݒ�
+            全体共通設定
 
         ConfigEvent.ps1
-            �X���[/���o����C�x���g
+            スルー/検出するイベント
 
-    �m�[�h�ŗL�ݒ�
+    ノード固有設定
             ConfigNode.ps1
 
-�� �t�@�C�� & �f�B���N�g���\��
-    �z�u��\
+■ ファイル & ディレクトリ構造
+    配置先\
         CheckEventLog.ps1
-            �C�x���g���O�Ď��{��
+            イベントログ監視本体
         RemoveExecLog.ps1
-            �ۑ����Ԑ؂���s���O�폜
+            保存期間切れ実行ログ削除
         GetDate.dat
-            �O����s����
+            前回実行時刻
 
         Install.ps1
-            �C�x���g���O�Ď��o�^
+            イベントログ監視登録
         Uninstall.ps1
-            �C�x���g���O�Ď��폜
+            イベントログ監視削除
         TestEvent.ps1
-            �e�X�g�p�C�x���g���O�L�^
+            テスト用イベントログ記録
 
         ConfigCommon.ps1
-            ���ʐݒ�
+            共通設定
         ConfigNode.ps1
-            �m�[�h�ݒ�
+            ノード設定
         ConfigEvent.ps1
-            �C�x���g�̃X���[/���o�ݒ�
+            イベントのスルー/検出設定
 
         Log\
-            ���s���O
+            実行ログ
 
-�� ���[���ɋL�ڂ���Ă�����
+■ メールに記載されている情報
 
-    �E�^�C�g��
-        ConfigNode.ps1 �̐ݒ肪�\������Ă��鍀��
-            �y�z           : �v���W�F�N�g��
-            ()             :   �T�[�o�[�̖���
+    ・タイトル
+        ConfigNode.ps1 の設定が表示されている項目
+            【】           : プロジェクト名
+            ()             :   サーバーの役割
 
-        �Ώۂ̏��
+        対象の情報
             xxxx           : hostname
-            xxxx/9999      : �C�x���g�\�[�X/�C�x���gID
+            xxxx/9999      : イベントソース/イベントID
 
-    �E�{��
-        ConfigNode.ps1 �̐ݒ肪�\������Ă��鍀��
-            Project Name   : �v���W�F�N�g��
-            Alias          : �T�[�o�[�̕ʖ�
-            Server Type    : �T�[�o�[�̖���
+    ・本文
+        ConfigNode.ps1 の設定が表示されている項目
+            Project Name   : プロジェクト名
+            Alias          : サーバーの別名
+            Server Type    : サーバーの役割
 
-        �Ώۂ̏��
-            ( 99 ��)       : ���o���������C�x���g��
-            Status         : �G���[�̎��
-            Host Name      : �z�X�g��
-            IPv4 Address   : IPv4 �A�h���X(�����N���[�J���͊܂܂�)
-            IPv6 Address   : IPv6 �A�h���X(�����N���[�J���͊܂܂�)
-            Manufacturer   : WMI ���瓾�����[�J�[��
-            Model          : WMI ���瓾�����f����
-            Serial Number  : WMI ���瓾���V���A���ԍ�(Dell ���� Service TAG)
-            OS             : OS �ƃT�[�r�X�p�b�N
-            Log Name       : ���o�������O��
-            Generated Time : �C�x���g�����o���ꂽ����
-            Event Source   : �C�x���g�\�[�X��
-            Event ID       : �C�x���gID
-            Message        : �C�x���g���O���b�Z�[�W
-            XML            : �C�x���g���O�� XML ���
+        対象の情報
+            ( 99 件)       : 検出した同じイベント数
+            Status         : エラーの種別
+            Host Name      : ホスト名
+            IPv4 Address   : IPv4 アドレス(リンクローカルは含まず)
+            IPv6 Address   : IPv6 アドレス(リンクローカルは含まず)
+            Manufacturer   : WMI から得たメーカー名
+            Model          : WMI から得たモデル名
+            Serial Number  : WMI から得たシリアル番号(Dell だと Service TAG)
+            OS             : OS とサービスパック
+            Log Name       : 検出したログ名
+            Generated Time : イベントが検出された時刻
+            Event Source   : イベントソース名
+            Event ID       : イベントID
+            Message        : イベントログメッセージ
+            XML            : イベントログの XML 情報
 
-�� �C�x���g���O�̌��o����
+■ イベントログの検出調整
 
-    ����G���[�C�x���g�����o���Ȃ��悤�ɂ���ꍇ
-        �uEvent Source�v �� �uEvent ID�v�� ConfigEvent.ps1 �́u�X���[����G���[�C�x���g�v�ɒǉ����܂��B
+    特定エラーイベントを検出しないようにする場合
+        「Event Source」 と 「Event ID」を ConfigEvent.ps1 の「スルーするエラーイベント」に追加します。
 
-    ����̌x���C�x���g�����o����悤�ɂ���
-        �uEvent Source�v �� �uEvent ID�v�� ConfigEvent.ps1 �́u�g���b�v����x���C�x���g�v�ɒǉ����܂��B
+    特定の警告イベントを検出するようにする
+        「Event Source」 と 「Event ID」を ConfigEvent.ps1 の「トラップする警告イベント」に追加します。
 
-        �C�x���g�\�[�X�ƃC�x���gID�́A�C�x���g�r���[�A�Łu�ڍׁv�^�u���J���ASystem ��W�J���Ƃ��ɕ\�������A�uProvider�v�ƁuEventID�v�ł��B
+        イベントソースとイベントIDは、イベントビューアで「詳細」タブを開き、System を展開たときに表示される、「Provider」と「EventID」です。
             EventLog_001.png
 
-    ����̏��C�x���g�����o����悤�ɂ���
-        �x���Ɠ��l�Ɂu�g���b�v������C�x���g�v�ɁuEvent Source�v �� �uEvent ID�v��ǉ����܂��B
+    特定の情報イベントを検出するようにする
+        警告と同様に「トラップする情報イベント」に「Event Source」 と 「Event ID」を追加します。
 
-    Dell Server �ŉ^�p���Ă����̂ŁADell �� Server Administrator �C�x���g�����o����悤�ɂ��Ă��܂��B(Dell �ȊO�ł����̂܂܉^�p���Ď��Q����)
+    Dell Server で運用していたので、Dell の Server Administrator イベントを検出するようにしています。(Dell 以外でもそのまま運用して実害無し)
 
-    �����[�J�[�̊Ǘ��c�[���̃C�x���g�����o����Ώۂɂ���ꍇ�́A�K�X�������Ă��������B
+    他メーカーの管理ツールのイベントを検出する対象にする場合は、適宜調整してください。
 
-�� �ŐV��
-    �ŐV�ňȉ��Ō��J���Ă��܂�
+■ 最新版
+    最新版以下で公開しています
 
-    PowerShell �ŃC�x���g���O�Ď�
+    PowerShell でイベントログ監視
     http://www.vwnet.jp/Windows/PowerShell/EventLogMonitoring.htm
 
-�� �X�V����
-    2016/08/27  1.00 ���J�p
-    2016/08/29  1.01 Install.ps1 / Uninstall.ps1 �����s����s��Ή�
-                     XML ���ςȂƂ���ɓ��� Bug �C��
-                     (���J�p�C�����̘R��ł��� orz)
-    2016/09/03  1.02 RemoveExecLog.ps1 �����s����s��Ή�
+■ 更新履歴
+    2016/08/27  1.00 公開用
+    2016/08/29  1.01 Install.ps1 / Uninstall.ps1 が失敗する不具合対応
+                     XML が変なところに入る Bug 修正
+                     (公開用修正時の漏れでした orz)
+    2016/09/03  1.02 RemoveExecLog.ps1 が失敗する不具合対応
