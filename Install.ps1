@@ -53,6 +53,53 @@ function HaveIAdministrativePrivileges(){
 	$IsRoleStatus = $WindowsPrincipal.IsInRole("Administrators")
 	return $IsRoleStatus
 }
+#################################################################################
+# スケジュール削除
+#################################################################################
+function RemoveSchedule(
+	[String]$ScheduleName
+){
+
+	$ScheduleFllName = $ScheduleName
+
+	Log "[INFO] スケジュール : $ScheduleFllName 削除開始"
+
+	# 実行終了しているかの確認
+	$ScheduleStatus = schtasks /Query /TN $ScheduleFllName
+	if($LastExitCode -ne 0){
+		Log "[INFO] スケジュール : $ScheduleFllName は存在しない"
+		return 0
+	}
+
+	if( -not(($ScheduleStatus[4] -match "準備完了") -or ($ScheduleStatus[4] -match "無効")) ){
+		# 実行終了していなかったら 15 秒待つ
+		Log "[INFO] スケジュール : $ScheduleFllName が終了していないので15秒待つ"
+		sleep 15
+		$ScheduleStatus = schtasks /Query /TN $ScheduleFllName
+		if($LastExitCode -ne 0){
+			Log "[FAIL] スケジュール : $ScheduleFllName 状態確認失敗"
+			Log "[FAIL] ●○●○ 処理異常終了 ●○●○"
+			return 99
+		}
+		if( -not(($ScheduleStatus[4] -match "準備完了") -or ($ScheduleStatus[4] -match "無効")) ){
+			Log "[FAIL] スケジュール : $ScheduleFllName 終了せず"
+			Log "[FAIL] ●○●○ 処理異常終了 ●○●○"
+			return 99
+		}
+	}
+
+	Log "[INFO] スケジュール : $ScheduleFllName 削除開始"
+	schtasks /Delete /TN "$ScheduleFllName" /F
+	if($LastExitCode -ne 0){
+		Log "[FAIL] スケジュール : $ScheduleFllName 削除失敗"
+		Log "[FAIL] ●○●○ 処理異常終了 ●○●○"
+		return 99
+	}
+	Log "[INFO] スケジュール : $ScheduleFllName 削除完了"
+	return 0
+}
+
+
 
 ##########################################################################
 #
@@ -66,6 +113,9 @@ if($Status -ne $true){
 	Log "[FAIL] 管理権限で実行してください"
 	exit
 }
+
+RemoveSchedule "CheckEventLog\Check EventLog Schedule"
+RemoveSchedule "CheckEventLog\Remove ExecLog Schedule"
 
 #------------------------------
 Log "[INFO] イベントログチェック本体登録"
