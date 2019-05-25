@@ -47,6 +47,7 @@ ixgbn 27
 e1rexpress 27
 Server Administrator 2094
 Server Administrator 2405
+AutoEnrollment 64
 "@
 
 # トラップする情報イベント(ソース イベントID)
