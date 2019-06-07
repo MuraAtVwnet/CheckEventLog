@@ -39,6 +39,7 @@ DCOM 10010
 Microsoft-Windows-CAPI2 4107
 Microsoft-Windows-FilterManager 3
 PerfNet 2004
+WIDWRITER 12289
 "@
 
 # トラップする警告イベント(ソース イベントID)
