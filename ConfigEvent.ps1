@@ -49,6 +49,7 @@ e1rexpress 27
 Server Administrator 2094
 Server Administrator 2405
 AutoEnrollment 64
+DhcpServer 1342
 "@
 
 # トラップする情報イベント(ソース イベントID)
