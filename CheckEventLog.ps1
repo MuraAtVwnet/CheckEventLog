@@ -420,6 +420,11 @@ foreach( $TergetLogName in $TergetLogNames ){
 				$ChkEvent = $Source + " " + $ID
 
 				Switch($EventType){
+					"0"{	# 重大の時
+						# トラップする
+						$TrapEvent = $True
+					}
+
 					"Error"{	# エラーの時
 						if( $SkipError -contains $ChkEvent){
 							# スキップ対象なのでスキップする
