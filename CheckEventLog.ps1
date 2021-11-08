@@ -421,8 +421,14 @@ foreach( $TergetLogName in $TergetLogNames ){
 
 				Switch($EventType){
 					"0"{	# 重大の時
-						# トラップする
-						$TrapEvent = $True
+						if( $SkipError -contains $ChkEvent){
+							# スキップ対象なのでスキップする
+							$TrapEvent = $False
+						}
+						else{
+							# トラップする
+							$TrapEvent = $True
+						}
 					}
 
 					"Error"{	# エラーの時
