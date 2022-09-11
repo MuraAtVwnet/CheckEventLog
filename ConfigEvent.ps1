@@ -51,6 +51,7 @@ Server Administrator 2405
 AutoEnrollment 64
 DhcpServer 1342
 DhcpServer 1063
+Disk 153
 "@
 
 # トラップする情報イベント(ソース イベントID)
