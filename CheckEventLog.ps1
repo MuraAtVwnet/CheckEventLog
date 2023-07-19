@@ -4,6 +4,8 @@
 #  エラーを見つけたらメールを送る
 #
 ##########################################################################
+Param( [switch]$Test)
+
 $G_ScriptDir = Split-Path $MyInvocation.MyCommand.Path -Parent
 $G_LogName = "EventLogCheck"				# ログファイル名
 
@@ -328,6 +330,41 @@ if( $SP -ne 0 ){
 [array]$TrapInformation = HereString2StringArray $C_TrapInformation
 [array]$CheckAppLogNames = HereString2StringArray $C_CheckAppLogNames
 [array]$RcpTos = HereString2StringArray $C_RcpTos
+
+if( $Test ){
+	$EventType = "Test"
+	$EventTime = (Get-Date).ToString()
+	$EventSource = "Test"
+	$EventID = "00000"
+	$EventMessage = "This is test"
+	$EventCount = "0"
+	$EventXMLData = [String]$null
+
+	MailSend `
+			$C_MSA `
+			$C_MailFrom `
+			$RcpTos `
+			$C_ProjectName `
+			$EventType `
+			$Manufacturer `
+			$Model `
+			$SerialNumber `
+			$OS `
+			$HostName `
+			$C_Alias `
+			$C_ServerType `
+			$HostIPv4Address `
+			$HostIPv6Address `
+			$TergetLogName `
+			$EventTime `
+			$EventSource `
+			$EventID `
+			$EventMessage `
+			$EventCount `
+			$EventXMLData
+			exit
+}
+
 
 # 前回の処理開始時刻を取得
 if( Test-Path $C_GetTimeFile ){
