@@ -40,6 +40,7 @@ Microsoft-Windows-CAPI2 4107
 Microsoft-Windows-FilterManager 3
 PerfNet 2004
 WIDWRITER 12289
+CertEnroll 57
 "@
 
 # トラップする警告イベント(ソース イベントID)
