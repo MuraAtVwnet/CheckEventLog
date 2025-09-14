@@ -61,6 +61,51 @@ function Log( $LogString ){
 	Return $Log
 }
 
+####################################
+# Slack メッセージを送る
+####################################
+function SendSlackMessage([string]$Message){
+
+	# トークンファイル
+	$TokenFileName = "TokenFile.txt"
+
+	# API URI
+	$ApiUri = "https://slack.com/api/chat.postMessage"
+
+	# トークンファイルの取得
+	$TokenFileFullPath = Join-Path $PSScriptRoot $TokenFileName
+	if( -not (Test-Path $TokenFileFullPath)){
+		return
+	}
+
+	# トークンファイルの読み込み
+	try{
+		[array]$TokenData = Get-Content -Path $TokenFileFullPath
+	}
+	catch{
+		Log "[FAIL] !!!!!!!! $TokenFileFullPath read error. !!!!!!!!"
+		return
+	}
+
+	# トークンとチャンネルの取得
+	$Token = $TokenData[0]
+	$Channel = $TokenData[1]
+	if(( $Token -eq $null ) -or ( $Channel -eq $null )){
+		Log "[ERROR] !!!!!!!! $TokenFileFullPath format error. !!!!!!!!"
+		return
+	}
+
+	# リクエストボディの作成
+	$body = @{
+		token = $Token
+		channel = $Channel
+		text = $Message
+	}
+
+	# メッセージ送信
+	Invoke-RestMethod -Method Post -Uri $ApiUri -Body $body
+}
+
 ##########################################################################
 # メール送信
 ##########################################################################
@@ -170,6 +215,10 @@ function MailSend(
 		Log "[INFO] $EventXMLData"
 	}
 	Log "[INFO] -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+
+	# Slack にも送る
+	$SendMessage = $Mail.Body
+	SendSlackMessage $SendMessage
 
 	# メール送信
 	# SubMission
