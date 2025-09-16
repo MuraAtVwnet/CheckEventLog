@@ -64,7 +64,7 @@ function Log( $LogString ){
 ####################################
 # Slack メッセージを送る
 ####################################
-function SendSlackMessage([string]$Message){
+function SendSlackMessage([string]$Summary, [string]$Message){
 
 	# トークンファイル
 	$TokenFileName = "TokenFile.txt"
@@ -83,7 +83,6 @@ function SendSlackMessage([string]$Message){
 		[array]$TokenData = Get-Content -Path $TokenFileFullPath
 	}
 	catch{
-		Log "[FAIL] !!!!!!!! $TokenFileFullPath read error. !!!!!!!!"
 		return
 	}
 
@@ -99,11 +98,33 @@ function SendSlackMessage([string]$Message){
 	$body = @{
 		token = $Token
 		channel = $Channel
-		text = $Message
+		text = $Summary
 	}
 
 	# メッセージ送信
-	Invoke-RestMethod -Method Post -Uri $ApiUri -Body $body
+	$Response = Invoke-RestMethod -Method Post -Uri $ApiUri -Body $body
+	if($Response.ok -ne $true){
+		Log "[ERROR] !!!!!!!! Slack API error. (body) !!!!!!!!"
+		return
+	}
+
+	if($Message -ne [string]$null){
+		$ThreadTs = $Response.ts
+		# スレッド用リクエストボディの作成
+		$body = @{
+			token = $Token
+			channel = $Channel
+			thread_ts = $ThreadTs
+			text = $Message
+		}
+
+		# スレッドメッセージ送信
+		$Response = Invoke-RestMethod -Method Post -Uri $ApiUri -Body $body
+		if($Response.ok -ne $true){
+			Log "[ERROR] !!!!!!!! Slack API error. (thread) !!!!!!!!"
+			return
+		}
+	}
 }
 
 ##########################################################################
@@ -217,8 +238,9 @@ function MailSend(
 	Log "[INFO] -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
 
 	# Slack にも送る
+	$SendTitol = $Mail.Subject
 	$SendMessage = $Mail.Body
-	SendSlackMessage $SendMessage
+	SendSlackMessage $SendTitol $SendMessage
 
 	# メール送信
 	# SubMission
